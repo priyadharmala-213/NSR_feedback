@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Infrastructure Feedback - NSRIT Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header-card h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-box h3 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-box p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .feedback-list {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feedback-item {
+            padding: 25px;
+            border-bottom: 1px solid #e9ecef;
+            transition: background 0.2s;
+        }
+        
+        .feedback-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .feedback-item:last-child {
+            border-bottom: none;
+        }
+        
+        .student-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .student-details h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .student-details p {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        .submission-date {
+            text-align: right;
+            font-size: 12px;
+            color: #95a5a6;
+        }
+        
+        .questions-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .question-response {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .question-text {
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .rating-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .rating-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 35px;
+            text-align: center;
+        }
+        
+        .rating-label {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        .comment-text {
+            color: #555;
+            font-style: italic;
+            margin-top: 8px;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+        
+        .no-data h3 {
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .back-link a {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .back-link a:hover {
+            background: #c0392b;
+        }
+        
+        .avg-rating {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .student-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .submission-date {
+                text-align: left;
+                margin-top: 10px;
+            }
+            
+            .rating-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🏫 College Infrastructure Feedback</h1>
+        <a href="/admin/dashboard">← Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        <div class="back-link">
+            <a href="/admin/dashboard">← Back to Admin Dashboard</a>
+        </div>
+        
+        <div class="header-card">
+            <h2>📊 College Infrastructure Feedback Analytics</h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Review all college infrastructure and mentorship feedback submitted by students</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h3>{{ college_feedbacks|length }}</h3>
+                    <p>Total Feedbacks</p>
+                </div>
+                
+                {% if college_feedbacks|length > 0 %}
+                    {% set avg_q1 = (college_feedbacks|map(attribute='q1_rating')|select('ne', none)|list|sum / (college_feedbacks|map(attribute='q1_rating')|select('ne', none)|list|length))|round(2) if (college_feedbacks|map(attribute='q1_rating')|select('ne', none)|list|length) > 0 else 0 %}
+                    {% set avg_q2 = (college_feedbacks|map(attribute='q2_rating')|select('ne', none)|list|sum / (college_feedbacks|map(attribute='q2_rating')|select('ne', none)|list|length))|round(2) if (college_feedbacks|map(attribute='q2_rating')|select('ne', none)|list|length) > 0 else 0 %}
+                    {% set avg_q3 = (college_feedbacks|map(attribute='q3_rating')|select('ne', none)|list|sum / (college_feedbacks|map(attribute='q3_rating')|select('ne', none)|list|length))|round(2) if (college_feedbacks|map(attribute='q3_rating')|select('ne', none)|list|length) > 0 else 0 %}
+                    {% set avg_q4 = (college_feedbacks|map(attribute='q4_rating')|select('ne', none)|list|sum / (college_feedbacks|map(attribute='q4_rating')|select('ne', none)|list|length))|round(2) if (college_feedbacks|map(attribute='q4_rating')|select('ne', none)|list|length) > 0 else 0 %}
+                    {% set avg_q5 = (college_feedbacks|map(attribute='q5_rating')|select('ne', none)|list|sum / (college_feedbacks|map(attribute='q5_rating')|select('ne', none)|list|length))|round(2) if (college_feedbacks|map(attribute='q5_rating')|select('ne', none)|list|length) > 0 else 0 %}
+                    
+                    <div class="stat-box" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                        <h3>{{ avg_q1 }}</h3>
+                        <p>Avg Infrastructure Rating</p>
+                    </div>
+                    <div class="stat-box" style="background: linear-gradient(135deg, #27ae60 0%, #229954 100%);">
+                        <h3>{{ avg_q5 }}</h3>
+                        <p>Overall Satisfaction</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if college_feedbacks|length > 0 %}
+            <div class="feedback-list">
+                {% for feedback in college_feedbacks %}
+                    <div class="feedback-item">
+                        <div class="student-info">
+                            <div class="student-details">
+                                <h3>{{ feedback.student.name }}</h3>
+                                <p>Roll: {{ feedback.student.roll_number }} | Branch: {{ feedback.student.branch }} | Email: {{ feedback.student.email }}</p>
+                            </div>
+                            <div class="submission-date">
+                                Submitted: <strong>{{ feedback.created_at.strftime('%d %b %Y, %H:%M') }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="questions-grid">
+                            <!-- Q1: Infrastructure -->
+                            <div class="question-response">
+                                <div class="question-text">Q1: The college infrastructure and facilities support learning</div>
+                                <div class="rating-row">
+                                    <div class="rating-display">
+                                        <span class="rating-badge">{{ feedback.q1_rating or 'N/A' }}</span>
+                                        <span class="rating-label">/5</span>
+                                    </div>
+                                </div>
+                                {% if feedback.q1_comment %}
+                                    <div class="comment-text">"{{ feedback.q1_comment }}"</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Q2: Library -->
+                            <div class="question-response">
+                                <div class="question-text">Q2: The college provides adequate library resources and digital access</div>
+                                <div class="rating-row">
+                                    <div class="rating-display">
+                                        <span class="rating-badge">{{ feedback.q2_rating or 'N/A' }}</span>
+                                        <span class="rating-label">/5</span>
+                                    </div>
+                                </div>
+                                {% if feedback.q2_comment %}
+                                    <div class="comment-text">"{{ feedback.q2_comment }}"</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Q3: Mentor Support -->
+                            <div class="question-response">
+                                <div class="question-text">Q3: The college mentor/guide supports your academic and personal development</div>
+                                <div class="rating-row">
+                                    <div class="rating-display">
+                                        <span class="rating-badge">{{ feedback.q3_rating or 'N/A' }}</span>
+                                        <span class="rating-label">/5</span>
+                                    </div>
+                                </div>
+                                {% if feedback.q3_comment %}
+                                    <div class="comment-text">"{{ feedback.q3_comment }}"</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Q4: Co-curricular -->
+                            <div class="question-response">
+                                <div class="question-text">Q4: The college provides opportunities for co-curricular and skill development activities</div>
+                                <div class="rating-row">
+                                    <div class="rating-display">
+                                        <span class="rating-badge">{{ feedback.q4_rating or 'N/A' }}</span>
+                                        <span class="rating-label">/5</span>
+                                    </div>
+                                </div>
+                                {% if feedback.q4_comment %}
+                                    <div class="comment-text">"{{ feedback.q4_comment }}"</div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Q5: Overall Satisfaction -->
+                            <div class="question-response">
+                                <div class="question-text">Q5: Overall, I am satisfied with the academic environment at the college</div>
+                                <div class="rating-row">
+                                    <div class="rating-display">
+                                        <span class="rating-badge">{{ feedback.q5_rating or 'N/A' }}</span>
+                                        <span class="rating-label">/5</span>
+                                    </div>
+                                </div>
+                                {% if feedback.q5_comment %}
+                                    <div class="comment-text">"{{ feedback.q5_comment }}"</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="feedback-list">
+                <div class="no-data">
+                    <h3>📭 No College Infrastructure Feedback Yet</h3>
+                    <p>Students haven't submitted any college infrastructure feedback yet. They will appear here once submitted.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Feedbacks - NSRIT Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .filter-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+        }
+        
+        .feedback-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .feedback-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+        
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .feedback-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .feedback-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .rating {
+            font-size: 18px;
+            color: #f39c12;
+        }
+        
+        .feedback-type {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #ecf0f1;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        
+        .feedback-comments {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            color: #555;
+            line-height: 1.6;
+            border-left: 3px solid #3498db;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state h2 {
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            margin-bottom: 20px;
+        }
+        
+        .back-link a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .stats {
+            background: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>View Feedbacks</h1>
+        <a href="/admin/dashboard">← Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        <div class="back-link">
+            <a href="/admin/dashboard">← Back to Dashboard</a>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-title">Filter Feedbacks</div>
+            <form method="GET" action="/admin/feedbacks">
+                <div class="filter-grid">
+                    <div>
+                        <label>Branch</label>
+                        <select name="branch">
+                            <option value="">All Branches</option>
+                            {% for branch in branches %}
+                                <option value="{{ branch }}" {% if request.args.get('branch') == branch %}selected{% endif %}>
+                                    {{ branch }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label>Semester</label>
+                        <select name="semester">
+                            <option value="">All Semesters</option>
+                            {% for i in range(1, 9) %}
+                                <option value="{{ i }}" {% if request.args.get('semester') == i|string %}selected{% endif %}>
+                                    Semester {{ i }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="btn">Apply Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="stats">
+            <strong>Total Feedbacks Found:</strong> {{ feedbacks|length }}
+        </div>
+        
+        <!-- Feedbacks List -->
+        {% if feedbacks %}
+            <div class="feedback-list">
+                {% for feedback in feedbacks %}
+                    <div class="feedback-card">
+                        <div class="feedback-header">
+                            <div>
+                                <div class="feedback-title">{{ feedback.subject.name }}</div>
+                                <span class="feedback-type">{{ feedback.feedback_type|capitalize }}</span>
+                            </div>
+                            {% if feedback.rating %}
+                                <div class="rating">{{ '⭐' * feedback.rating }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="feedback-meta">
+                            <span class="meta-item">
+                                <strong>Student:</strong> {{ feedback.student.name }}
+                            </span>
+                            <span class="meta-item">
+                                <strong>Branch:</strong> {{ feedback.subject.branch.name }}
+                            </span>
+                            <span class="meta-item">
+                                <strong>Semester:</strong> {{ feedback.subject.semester.number }}
+                            </span>
+                            <span class="meta-item">
+                                <strong>Date:</strong> {{ feedback.created_at.strftime('%d-%m-%Y %H:%M') }}
+                            </span>
+                            {% if feedback.rating %}
+                                <span class="meta-item">
+                                    <strong>Rating:</strong> {{ feedback.rating }}/5
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if feedback.comments %}
+                            <div class="feedback-comments">
+                                <strong>Comments:</strong><br>
+                                {{ feedback.comments }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h2>No Feedbacks Found</h2>
+                <p>Try adjusting your filter criteria to see feedbacks.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

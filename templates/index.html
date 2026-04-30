@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSRIT Feedback System</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .homepage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .home-container {
+            text-align: center;
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 36px;
+        }
+        
+        .tagline {
+            color: #7f8c8d;
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+        
+        .portal-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .portal {
+            padding: 30px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .portal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .portal.student {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        .portal.admin {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+        }
+        
+        .portal h2 {
+            margin: 0 0 15px 0;
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        
+        .portal p {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .portal-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .portal-links a {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .portal.student .login-btn {
+            background: #3498db;
+        }
+        
+        .portal.student .login-btn:hover {
+            background: #2980b9;
+        }
+        
+        .portal.student .register-btn {
+            background: #2ecc71;
+        }
+        
+        .portal.student .register-btn:hover {
+            background: #27ae60;
+        }
+        
+        .portal.admin .login-btn {
+            background: #e74c3c;
+        }
+        
+        .portal.admin .login-btn:hover {
+            background: #c0392b;
+        }
+        
+        @media (max-width: 768px) {
+            .portal-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .home-container {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="homepage">
+        <div class="home-container">
+            <div class="logo">🏫</div>
+            <h1>NSRIT College</h1>
+            <p class="tagline">Comprehensive Feedback & Complaint Management System</p>
+            
+            <div class="portal-container">
+                <!-- Student Portal -->
+                <div class="portal student">
+                    <h2>👨‍🎓 Student Portal</h2>
+                    <p>Access feedback forms, submit complaints, and track your academic journey</p>
+                    <div class="portal-links">
+                        <a href="/student-login" class="login-btn">Login</a>
+                        <a href="/student-register" class="register-btn">Register</a>
+                    </div>
+                </div>
+                
+                <!-- Admin Portal -->
+                <div class="portal admin">
+                    <h2>👨‍💼 Admin Portal</h2>
+                    <p>View analytics, manage feedbacks, and oversee complaints</p>
+                    <div class="portal-links">
+                        <a href="/admin-login" class="login-btn">Admin Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

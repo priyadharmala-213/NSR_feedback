@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Feedback - NSRIT Feedback System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .rating-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .rating-option {
+            flex: 1;
+            position: relative;
+        }
+        
+        .rating-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            margin: 0;
+        }
+        
+        .rating-option label {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0;
+        }
+        
+        .rating-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .rating-option label:hover {
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #6c7a80;
+        }
+        
+        .alerts {
+            margin-bottom: 30px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .subject-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .subject-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>NSRIT Feedback System</h1>
+        <a href="/student/dashboard">← Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="card">
+            <h2>📝 Submit Your Feedback</h2>
+            <p>Your feedback helps us improve the quality of education and teaching.</p>
+            
+            <form action="/student/submit-feedback" method="POST">
+                <!-- Subject Selection -->
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select name="subject_id" required>
+                        <option value="">Select a subject...</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">
+                                {{ subject.name }} ({{ subject.subject_type|capitalize }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Feedback Type -->
+                <div class="form-group">
+                    <label for="feedback_type">Feedback Type</label>
+                    <select name="feedback_type" required>
+                        <option value="">Select feedback type...</option>
+                        <option value="subject">Subject Quality</option>
+                        <option value="faculty">Faculty Performance</option>
+                        <option value="lab">Lab/Practical Work</option>
+                        <option value="project">Project Guidance</option>
+                        <option value="internship">Internship Experience</option>
+                    </select>
+                </div>
+                
+                <!-- Rating -->
+                <div class="form-group">
+                    <label>Rating (1 = Poor, 5 = Excellent)</label>
+                    <div class="rating-group">
+                        {% for i in range(1, 6) %}
+                            <div class="rating-option">
+                                <input type="radio" id="rating{{ i }}" name="rating" value="{{ i }}" required>
+                                <label for="rating{{ i }}">{{ i }} ⭐</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <!-- Comments -->
+                <div class="form-group">
+                    <label for="comments">Comments/Feedback</label>
+                    <textarea name="comments" required placeholder="Share your detailed feedback, suggestions, or concerns..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Feedback</button>
+                <a href="/student/feedback" class="btn btn-secondary">Clear Form</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

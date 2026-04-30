@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Complaints - NSRIT Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .filter-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #c0392b;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+        
+        .complaint-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .complaint-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #f39c12;
+        }
+        
+        .complaint-card.resolved {
+            border-left-color: #2ecc71;
+        }
+        
+        .complaint-card.in-progress {
+            border-left-color: #3498db;
+        }
+        
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .complaint-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-open {
+            background: #e74c3c;
+        }
+        
+        .status-in-progress {
+            background: #3498db;
+        }
+        
+        .status-resolved {
+            background: #2ecc71;
+        }
+        
+        .complaint-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .complaint-description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            color: #555;
+            line-height: 1.6;
+            border-left: 3px solid #f39c12;
+            margin-bottom: 15px;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state h2 {
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            margin-bottom: 20px;
+        }
+        
+        .back-link a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .stats {
+            background: #ecf0f1;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>View Complaints</h1>
+        <a href="/admin/dashboard">← Back to Dashboard</a>
+    </div>
+    
+    <div class="container">
+        <div class="back-link">
+            <a href="/admin/dashboard">← Back to Dashboard</a>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-title">Filter Complaints</div>
+            <form method="GET" action="/admin/complaints">
+                <div class="filter-grid">
+                    <div>
+                        <label>Status</label>
+                        <select name="status">
+                            <option value="">All Statuses</option>
+                            <option value="open" {% if request.args.get('status') == 'open' %}selected{% endif %}>Open</option>
+                            <option value="in_progress" {% if request.args.get('status') == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="resolved" {% if request.args.get('status') == 'resolved' %}selected{% endif %}>Resolved</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="btn">Apply Filters</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="stats">
+            <strong>Total Complaints Found:</strong> {{ complaints|length }}
+        </div>
+        
+        <!-- Complaints List -->
+        {% if complaints %}
+            <div class="complaint-list">
+                {% for complaint in complaints %}
+                    <div class="complaint-card {{ complaint.status }}">
+                        <div class="complaint-header">
+                            <div>
+                                <div class="complaint-title">{{ complaint.subject }}</div>
+                            </div>
+                            <span class="status-badge status-{{ complaint.status }}">
+                                {{ complaint.status|replace('_', ' ')|upper }}
+                            </span>
+                        </div>
+                        
+                        <div class="complaint-meta">
+                            <span class="meta-item">
+                                <strong>Student:</strong> {{ complaint.student.name }} ({{ complaint.student.roll_number }})
+                            </span>
+                            <span class="meta-item">
+                                <strong>Email:</strong> {{ complaint.student.email }}
+                            </span>
+                            <span class="meta-item">
+                                <strong>Submitted:</strong> {{ complaint.created_at.strftime('%d-%m-%Y %H:%M') }}
+                            </span>
+                            {% if complaint.resolved_at %}
+                                <span class="meta-item">
+                                    <strong>Resolved:</strong> {{ complaint.resolved_at.strftime('%d-%m-%Y') }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="complaint-description">
+                            <strong>Description:</strong><br>
+                            {{ complaint.description }}
+                        </div>
+                        
+                        <div class="actions">
+                            <button class="btn btn-small" onclick="alert('Mark as In Progress - Feature Coming Soon')">Mark In Progress</button>
+                            <button class="btn btn-small" style="background: #2ecc71;" onclick="alert('Mark as Resolved - Feature Coming Soon')">Mark Resolved</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h2>No Complaints Found</h2>
+                <p>Try adjusting your filter criteria to see complaints.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

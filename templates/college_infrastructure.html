@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Infrastructure Feedback - NSRIT Feedback System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .header-section h2 {
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .header-section p {
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .instructions {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .instructions strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .question-section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .question-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+        
+        .question-text {
+            color: #1a1a1a;
+            font-size: 16px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .question-description {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .rating-label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .options-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .option {
+            flex: 1;
+            min-width: 50px;
+            position: relative;
+        }
+        
+        .option input[type="radio"] {
+            display: none;
+        }
+        
+        .option label {
+            display: block;
+            padding: 10px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .option label:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .comment-section {
+            margin-top: 12px;
+        }
+        
+        .comment-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            resize: vertical;
+            min-height: 70px;
+            font-size: 13px;
+        }
+        
+        .comment-section textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #7f8c8d;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-secondary:hover {
+            background: #6c7a80;
+        }
+        
+        .alerts {
+            margin-bottom: 20px;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #f5c6cb;
+        }
+        
+        .required-note {
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .rating-description {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: #999;
+        }
+        
+        .rating-description span {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🏫 College Infrastructure Feedback</h1>
+        <div>
+            <a href="/student/dashboard">← Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Header -->
+        <div class="card">
+            <div class="header-section">
+                <h2>🏫 College Infrastructure & Mentorship Feedback</h2>
+                <p>Your Name: <strong>{{ user.name }}</strong></p>
+                <p>Roll Number: <strong>{{ user.roll_number }}</strong> | Branch: <strong>{{ user.branch }}</strong></p>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="instructions">
+                <strong>📝 Instructions:</strong>
+                Please rate your agreement with each statement on a scale of 1 to 5:
+                <br>1 = Strongly Disagree | 2 = Disagree | 3 = Neutral | 4 = Agree | 5 = Strongly Agree
+                <br>Optional: You can provide additional comments for each question
+                <br><span class="required-note">* All ratings are mandatory</span>
+            </div>
+            
+            <!-- Feedback Form -->
+            <form action="/student/submit-college-feedback" method="POST" onsubmit="return validateForm()">
+                <!-- College Infrastructure Questions -->
+                <div class="question-section">
+                    <div class="section-title">🏫 College Infrastructure & Mentorship Questions</div>
+                    
+                    {% for q in questions %}
+                        <div class="question-item">
+                            <div class="question-number">{{ q.id|upper }}: <span class="required-note">*</span></div>
+                            <div class="question-text">{{ q.question }}</div>
+                            <div class="question-description">{{ q.description }}</div>
+                            
+                            <div>
+                                <label class="rating-label">Rating</label>
+                                <div class="rating-description">
+                                    <span>Strongly Disagree</span>
+                                    <span>Strongly Agree</span>
+                                </div>
+                                <div class="options-group">
+                                    {% for rating in [1, 2, 3, 4, 5] %}
+                                        <div class="option">
+                                            <input type="radio" id="{{ q.id }}_{{ rating }}" 
+                                                   name="{{ q.id }}_rating" value="{{ rating }}" required>
+                                            <label for="{{ q.id }}_{{ rating }}">{{ rating }}</label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <!-- Optional Comment -->
+                            <div class="comment-section">
+                                <label for="{{ q.id }}_comment" style="font-size: 12px; color: #666;">Additional Comments (Optional)</label>
+                                <textarea id="{{ q.id }}_comment" name="{{ q.id }}_comment" 
+                                         placeholder="Share your thoughts or suggestions..."></textarea>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <a href="/student/dashboard" class="btn btn-secondary">← Back to Dashboard</a>
+                    <button type="submit" class="btn btn-primary">✅ Submit Feedback</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function validateForm() {
+            // Get all required radio buttons
+            const requiredFields = document.querySelectorAll('input[type="radio"][required]');
+            const groupedByName = {};
+            
+            // Group by name (question id)
+            requiredFields.forEach(field => {
+                if (!groupedByName[field.name]) {
+                    groupedByName[field.name] = [];
+                }
+                groupedByName[field.name].push(field);
+            });
+            
+            // Check if each question group has at least one checked
+            for (const name in groupedByName) {
+                const isChecked = groupedByName[name].some(field => field.checked);
+                if (!isChecked) {
+                    alert('Please rate all questions before submitting!');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "admin@nsrit.edu": {
+    "name": "Admin",
+    "password": "admin123",
+    "user_type": "admin"
+  },
+  "priyadharmala@gmail.com": {
+    "name": "priya ",
+    "email": "priyadharmala@gmail.com",
+    "roll_number": "25nu1a42e0",
+    "password": "778899",
+    "user_type": "student",
+    "branch": "CSE-AI&ML",
+    "semester": 2,
+    "completed_subjects": []
+  },
+  "praneethdharmala@gmail.com": {
+    "name": "praneeth",
+    "email": "praneethdharmala@gmail.com",
+    "password": "885522",
+    "user_type": "admin"
+  },
+  "25nu1a42e0@nsrit.edu.in": {
+    "name": "praneeth",
+    "email": "25nu1a42e0@nsrit.edu.in",
+    "password": "12345",
+    "user_type": "admin"
+  }
+}

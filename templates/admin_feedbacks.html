@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Feedbacks - NSRIT Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            padding: 20px 40px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .filter-title {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+        
+        .filter-grid > div {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-grid label {
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            display: block;
+        }
+        
+        .filter-grid select, .filter-grid input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .filter-grid button {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .filter-grid button:hover {
+            background: #c0392b;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+        
+        .feedback-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .feedback-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #e74c3c;
+        }
+        
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .feedback-info h3 {
+            color: #2c3e50;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .feedback-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .timestamp {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .responses-section {
+            margin-top: 20px;
+        }
+        
+        .response-category {
+            margin-bottom: 25px;
+        }
+        
+        .category-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+        
+        .response-item {
+            background: #f9f9f9;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .response-question {
+            flex: 1;
+            font-size: 13px;
+            color: #333;
+        }
+        
+        .response-rating {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            min-width: 35px;
+            text-align: center;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .no-data h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>📊 View Student Feedback</h1>
+        <div>
+            <a href="/admin/dashboard">← Back to Dashboard</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_responses }}</div>
+                <div class="stat-label">Total Responses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ subjects_evaluated }}</div>
+                <div class="stat-label">Subjects Evaluated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ students_responded }}</div>
+                <div class="stat-label">Students Responded</div>
+            </div>
+            {% if avg_ratings %}
+            <div class="stat-card">
+                <div class="stat-number">{{ avg_ratings.subject }}/5</div>
+                <div class="stat-label">Avg Subject Rating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ avg_ratings.faculty }}/5</div>
+                <div class="stat-label">Avg Faculty Rating</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ avg_ratings.college }}/5</div>
+                <div class="stat-label">Avg College Rating</div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-title">🔍 Filter Feedbacks</div>
+            <form method="GET" action="/admin/feedbacks">
+                <div class="filter-grid">
+                    <div>
+                        <label>Subject</label>
+                        <select name="subject">
+                            <option value="">All Subjects</option>
+                            {% set subjects_list = feedbacks|map(attribute='subject_name')|unique|list %}
+                            {% for subj in subjects_list|sort %}
+                                <option value="{{ subj }}" {% if request.args.get('subject') == subj %}selected{% endif %}>
+                                    {{ subj }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label>Branch</label>
+                        <select name="branch">
+                            <option value="">All Branches</option>
+                            {% for branch in branches %}
+                                <option value="{{ branch }}" {% if request.args.get('branch') == branch %}selected{% endif %}>
+                                    {{ branch }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label>Semester</label>
+                        <select name="semester">
+                            <option value="">All Semesters</option>
+                            {% for i in range(1, 9) %}
+                                <option value="{{ i }}" {% if request.args.get('semester') == i|string %}selected{% endif %}>
+                                    Semester {{ i }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit">🔍 Filter</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Feedback List -->
+        <div class="feedback-list">
+            {% if feedbacks %}
+                {% set filtered_feedbacks = feedbacks %}
+                {% if request.args.get('subject') %}
+                    {% set filtered_feedbacks = filtered_feedbacks|selectattr('subject_name', 'equalto', request.args.get('subject'))|list %}
+                {% endif %}
+                {% if request.args.get('branch') %}
+                    {% set filtered_feedbacks = filtered_feedbacks|selectattr('branch', 'equalto', request.args.get('branch'))|list %}
+                {% endif %}
+                {% if request.args.get('semester') %}
+                    {% set filtered_feedbacks = filtered_feedbacks|selectattr('semester', 'equalto', request.args.get('semester')|int)|list %}
+                {% endif %}
+                
+                {% if filtered_feedbacks %}
+                    {% for feedback in filtered_feedbacks %}
+                        <div class="feedback-card">
+                            <div class="feedback-header">
+                                <div class="feedback-info">
+                                    <h3>📚 {{ feedback.subject_name }}</h3>
+                                    <div class="feedback-meta">
+                                        <span class="meta-item">👤 <strong>{{ feedback.student_name }}</strong></span>
+                                        <span class="meta-item">📧 {{ feedback.email }}</span>
+                                        <span class="meta-item">🏢 {{ feedback.branch }} - Sem {{ feedback.semester }}</span>
+                                        <span class="meta-item">🕐 <span class="timestamp">{{ feedback.timestamp }}</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Responses -->
+                            <div class="responses-section">
+                                <!-- Subject Quality Responses -->
+                                <div class="response-category">
+                                    <div class="category-title">📖 Subject Quality & Content Feedback</div>
+                                    {% for q_id in ['s1', 's2', 's3', 's4', 's5'] %}
+                                        {% if feedback.responses[q_id] %}
+                                            <div class="response-item">
+                                                <div class="response-question">
+                                                    {% if q_id == 's1' %}The subject content is clear and well-organized
+                                                    {% elif q_id == 's2' %}The curriculum covers relevant and practical topics
+                                                    {% elif q_id == 's3' %}The subject helps in developing practical skills
+                                                    {% elif q_id == 's4' %}The difficulty level is appropriate for the semester
+                                                    {% elif q_id == 's5' %}The learning materials and resources provided are sufficient
+                                                    {% endif %}
+                                                </div>
+                                                <div class="response-rating">{{ feedback.responses[q_id] }}/5</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                
+                                <!-- Faculty Performance Responses -->
+                                <div class="response-category">
+                                    <div class="category-title">👨‍🏫 Faculty Performance & Teaching Feedback</div>
+                                    {% for q_id in ['f1', 'f2', 'f3', 'f4', 'f5'] %}
+                                        {% if feedback.responses[q_id] %}
+                                            <div class="response-item">
+                                                <div class="response-question">
+                                                    {% if q_id == 'f1' %}The instructor teaches the subject clearly and effectively
+                                                    {% elif q_id == 'f2' %}The instructor is well-prepared and knowledgeable
+                                                    {% elif q_id == 'f3' %}The instructor encourages student participation and doubt-solving
+                                                    {% elif q_id == 'f4' %}The instructor is approachable and responsive to student questions
+                                                    {% elif q_id == 'f5' %}The instructor evaluates students fairly and provides constructive feedback
+                                                    {% endif %}
+                                                </div>
+                                                <div class="response-rating">{{ feedback.responses[q_id] }}/5</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                
+                                <!-- College Infrastructure Responses -->
+                                <div class="response-category">
+                                    <div class="category-title">🏫 College Infrastructure & Mentorship Feedback</div>
+                                    {% for q_id in ['c1', 'c2', 'c3', 'c4', 'c5'] %}
+                                        {% if feedback.responses[q_id] %}
+                                            <div class="response-item">
+                                                <div class="response-question">
+                                                    {% if q_id == 'c1' %}The college infrastructure and facilities support learning
+                                                    {% elif q_id == 'c2' %}The college provides adequate library resources and digital access
+                                                    {% elif q_id == 'c3' %}The college mentor/guide supports your academic and personal development
+                                                    {% elif q_id == 'c4' %}The college provides opportunities for co-curricular and skill development activities
+                                                    {% elif q_id == 'c5' %}Overall, I am satisfied with the academic environment at the college
+                                                    {% endif %}
+                                                </div>
+                                                <div class="response-rating">{{ feedback.responses[q_id] }}/5</div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data">
+                        <h3>No feedback found</h3>
+                        <p>No feedback matches your filter criteria.</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="no-data">
+                    <h3>No feedback yet</h3>
+                    <p>Students haven't submitted any feedback yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

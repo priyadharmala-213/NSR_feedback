@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - NSRIT Feedback System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 20px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .alerts {
+            margin-bottom: 30px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-body {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #3498db;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-warning {
+            background: #f39c12;
+            margin-top: 10px;
+        }
+        
+        .btn-warning:hover {
+            background: #d68910;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            color: #555;
+        }
+        
+        .info-box strong {
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .user-info {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .logout-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>NSRIT Feedback System</h1>
+        <div class="user-info">
+            <span style="color: #2c3e50;">Welcome, <strong>{{ user.name }}</strong></span>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="alerts">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="dashboard-grid">
+            <!-- Branch & Semester Selection -->
+            <div class="card">
+                <h2>🎓 Select Your Branch & Semester</h2>
+                <div class="info-box">
+                    {% if user.branch and user.semester %}
+                        <p><strong>Current Selection:</strong></p>
+                        <p>Branch: {{ user.branch }}</p>
+                        <p>Semester: {{ user.semester }}</p>
+                    {% else %}
+                        <p style="color: #856404;">No branch/semester selected yet</p>
+                    {% endif %}
+                </div>
+                
+                <form action="/student/select-branch" method="POST">
+                    <label>Branch</label>
+                    <select name="branch" required>
+                        <option value="">Choose your branch...</option>
+                        {% for branch in branches %}
+                            <option value="{{ branch }}" {% if user.branch == branch %}selected{% endif %}>
+                                {{ branch }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <label>Semester</label>
+                    <select name="semester" required>
+                        <option value="">Choose your semester...</option>
+                        {% for i in range(1, 9) %}
+                            <option value="{{ i }}" {% if user.semester == i %}selected{% endif %}>
+                                Semester {{ i }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <button type="submit" class="btn">Update Selection</button>
+                </form>
+            </div>
+            
+            <!-- Feedback Submission -->
+            <div class="card">
+                <h2>📝 Submit Feedback</h2>
+                <p style="color: #555; margin-bottom: 15px;">
+                    Rate your subjects and provide valuable feedback to help improve the academic experience.
+                </p>
+                <a href="/student/feedback" class="btn">Go to Subject Feedback</a>
+                <a href="/student/college-feedback" class="btn btn-secondary">College Infrastructure Feedback</a>
+                <a href="/student/complaint" class="btn btn-warning">Submit Complaint</a>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="card">
+                <h2>📊 Your Activity</h2>
+                <div class="info-box">
+                    <p><strong>Branch:</strong> {{ user.branch or 'Not selected' }}</p>
+                    <p><strong>Semester:</strong> {{ user.semester or 'Not selected' }}</p>
+                    <p><strong>Roll Number:</strong> {{ user.roll_number }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
